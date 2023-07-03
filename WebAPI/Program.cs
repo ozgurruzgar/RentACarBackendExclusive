@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Business.Abstract;
@@ -5,22 +6,20 @@ using Business.Concrete;
 using Business.DependencyResolvers.Autofac;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);   
 
 // Add services to the container.
-builder.Services.AddSingleton<ICarService, CarManager>();
-builder.Services.AddSingleton<ICarDal, EfCarDal>();
-builder.Services.AddSingleton<IBrandService, BrandManager>();
-builder.Services.AddSingleton<IBrandDal, EfBrandDal>();
-builder.Services.AddSingleton<IColorService, ColorManager>();
-builder.Services.AddSingleton<IColorDal, EfColorDal>();
-builder.Services.AddSingleton<ICustomerService, CustomerManager>();
-builder.Services.AddSingleton<ICustomerDal, EfCustomerDal>();
-builder.Services.AddSingleton<IRentalService, RentalManager>();
-builder.Services.AddSingleton<IRentalDal, EfRentalDal>();
 builder.Services.AddControllers();
+//Hangfire Impletation
+builder.Services.AddHangfire(config =>
+{
+    config.UseSqlServerStorage(builder.Configuration.GetConnectionString("HangFireConnection"));
+});
+builder.Services.AddHangfireServer();
+
 
 //Autofac .Net 6+ Implementation
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
@@ -42,6 +41,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+//we can see dashboard when we search this routerlink: www.localhost:44413/api/hangfire
+app.UseHangfireDashboard("/hangfire");
 
 app.UseAuthorization();
 

@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Business.Abstract;
 using Business.Concrete;
+using Core.Services;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using System;
@@ -25,6 +26,7 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<EfCustomerDal>().As<ICustomerDal>().SingleInstance();
             builder.RegisterType<EfRentalDal>().As<IRentalDal>().SingleInstance();
             builder.RegisterType<RentalManager>().As<IRentalService>().SingleInstance();
+            builder.RegisterType<EmailSender>().As<IEmailSender>().SingleInstance();
         }
     }
 }

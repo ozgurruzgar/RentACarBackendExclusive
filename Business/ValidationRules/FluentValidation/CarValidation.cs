@@ -20,12 +20,12 @@ namespace Business.ValidationRules.FluentValidation
             RuleFor(c=>c.CarId).NotEqual(0);
             RuleFor(c=>c.BrandId).NotEqual(0);
             RuleFor(c=>c.ColorId).NotEqual(0);
-            RuleFor(c => c.ModelYear).GreaterThan(2010);
-            RuleFor(c => c.ModelYear).LessThanOrEqualTo(DateTime.Now.Year);
+            RuleFor(c => c.ModelYear).GreaterThan((short)2010);
+            RuleFor(c => c.ModelYear).LessThanOrEqualTo((short)DateTime.Now.Year);
             RuleFor(c => c.Model).NotEmpty();
             RuleFor(c => c.Model).MinimumLength(3);
             RuleFor(c => c.DailyPrice).NotNull();
-            RuleFor(c => c.DailyPrice).GreaterThan(100);
+            RuleFor(c => c.DailyPrice).GreaterThan((decimal)100);
 
             
         }
