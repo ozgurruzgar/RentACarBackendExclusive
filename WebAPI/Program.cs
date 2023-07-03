@@ -13,13 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
 //Hangfire Impletation
 builder.Services.AddHangfire(config =>
 {
     config.UseSqlServerStorage(builder.Configuration.GetConnectionString("HangFireConnection"));
 });
 builder.Services.AddHangfireServer();
-
 
 //Autofac .Net 6+ Implementation
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())

@@ -50,7 +50,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllAsync()
         {
             var result = await _colorService.GetAllAsync();
             if(result.Data == null)
@@ -60,7 +60,7 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
         [HttpGet("getbyid")]
-        public async Task<IActionResult> GetById(int colorId)
+        public async Task<IActionResult> GetByIdAsync(int colorId)
         {
             var result = await _colorService.GetAsync(colorId);
             if (result.Data == null)
