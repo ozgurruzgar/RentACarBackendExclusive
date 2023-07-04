@@ -30,7 +30,7 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
 //Redis Cache .Net 6+ Impletation 
 builder.Services.AddSingleton<RedisCacheManager>(sp =>
 {
-    return new RedisCacheManager(builder.Configuration["CacheOptions:Url"]);
+    return new RedisCacheManager(builder.Configuration["CacheOptions:Url"],0);
 });
 
 //AutoMapper .Net 6+ Implementation
