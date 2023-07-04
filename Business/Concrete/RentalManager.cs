@@ -2,6 +2,7 @@
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTO_s;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,11 @@ namespace Business.Concrete
         {
             var rental = await _rentalDal.GetAsync(r=>r.RentalId == rentalId);
             return new SuccessDataResult<Rental>(rental);
+        }
+
+        public IDataResult<List<RentalDetailDto>> GetRentalDetails()
+        {
+            return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetail());
         }
 
         public IResult Update(Rental rental)

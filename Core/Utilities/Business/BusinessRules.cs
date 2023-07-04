@@ -20,5 +20,18 @@ namespace Core.Utilities.Business
             }
             return null;
         }
+
+        public static async Task<IResult> RunTasks(params Task<IResult>[] logics)
+        {
+            foreach (var logic in logics)
+            {
+                var tasks = await logic;
+                if (!tasks.Success)
+                {
+                    return tasks;
+                }
+            }
+            return null;
+        }
     }
 }

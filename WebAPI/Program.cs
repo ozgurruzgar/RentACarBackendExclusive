@@ -4,6 +4,7 @@ using Autofac.Extensions.DependencyInjection;
 using Business.Abstract;
 using Business.Concrete;
 using Business.DependencyResolvers.Autofac;
+using Business.Mapping.AutoMapper;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Hangfire;
@@ -24,6 +25,12 @@ builder.Services.AddHangfireServer();
 //Autofac .Net 6+ Implementation
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacBusinessModule()));
+
+//AutoMapper .Net 6+ Implementation
+builder.Services.AddAutoMapper(typeof(CarProfile));
+builder.Services.AddAutoMapper(typeof(CustomerProfile));
+builder.Services.AddAutoMapper(typeof(RentalProfile));
+builder.Services.AddAutoMapper(typeof(UserProfile));
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

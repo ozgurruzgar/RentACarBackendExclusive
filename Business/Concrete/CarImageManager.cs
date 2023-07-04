@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Utilities.Business;
 using Core.Utilities.Helpers;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -17,6 +18,11 @@ namespace Business.Concrete
         private readonly ICarImageDal _carImageDal;
         public IResult Add(IFormFile file, CarImage carImage)
         {
+            Task<IResult> result = BusinessRules.RunTasks(CheckIfCarImageLimitExceeded(carImage.CarId));
+            if (result.Result !=null)
+            {
+                return result.Result;   
+            }
             carImage.ImagePath = FileHelper.Add(file);
             carImage.Date = DateTime.Now;
             _carImageDal.Add(carImage);
@@ -25,7 +31,12 @@ namespace Business.Concrete
 
         public IResult Delete(CarImage carImage)
         {
-           _carImageDal.Delete(carImage);
+           IResult result = BusinessRules.Run(CarImageDelete(carImage));
+            if (result != null)
+            {
+                return result;
+            }
+            _carImageDal.Delete(carImage);
             return new SuccessResult();
         }
 
@@ -50,10 +61,51 @@ namespace Business.Concrete
 
         public async Task<IResult> Update(IFormFile file, CarImage carImage)
         {
+            Task<IResult> result = BusinessRules.RunTasks(CheckIfCarImageLimitExceeded(carImage.CarId));
+            if (result.Result != null)
+            {
+                return result.Result;
+            }
             var oldImageId = await GetAsync(carImage.Id);
             carImage.Date = DateTime.Now;
             string oldPath = oldImageId.Data.ImagePath;
             carImage.ImagePath = FileHelper.Update(oldPath, file);
+            return new SuccessResult();
+        }
+
+        private IResult CarImageDelete(CarImage carImage)
+        {
+            try
+            {
+                _carImageDal.Delete(carImage);
+            }
+            catch (Exception exception)
+            {
+                return new ErrorResult(exception.Message);
+            }
+            return new SuccessResult();
+        }
+
+        private async Task<List<CarImage>> CheckIfCarImageNull(int carId)
+        {
+            string path = @"DefaultIamge.jpg";
+            var result = await _carImageDal.GetAllAsync(c => c.CarId == carId);
+            if (result.Any() == false)
+            {
+                return new List<CarImage> { new CarImage { CarId = carId, ImagePath = path, Date = DateTime.Now } };
+            }
+            var carImageList = await _carImageDal.GetAllAsync(c => c.CarId == carId);
+            return carImageList;
+        }
+
+        private async Task<IResult> CheckIfCarImageLimitExceeded(int carId)
+        {
+            var carImageList = await _carImageDal.GetAllAsync(c=>c.CarId == carId);
+            var list = carImageList.Count; 
+            if(list > 15)
+            {
+                return new ErrorResult();
+            }
             return new SuccessResult();
         }
     }

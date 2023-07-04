@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -19,6 +20,7 @@ namespace Business.Concrete
         }
         public IResult Add(Color color)
         {
+            var result = BusinessRules.Run(CheckIfColorNameLengthExceeded(color.ColorName));
            _colorDal.Add(color);
             return new SuccessResult();
         }
@@ -44,6 +46,15 @@ namespace Business.Concrete
         public IResult Update(Color color)
         {
            _colorDal.Update(color);
+            return new SuccessResult();
+        }
+
+        private IResult CheckIfColorNameLengthExceeded(string colorName)
+        {
+            if (colorName.Length >= 30)
+            {
+                return new ErrorResult();
+            }
             return new SuccessResult();
         }
     }

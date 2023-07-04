@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -19,6 +20,11 @@ namespace Business.Concrete
         }
         public IResult Add(Brand brand)
         {
+            var result = BusinessRules.Run(CheckIfBrandNameLengthExceeded(brand.BrandName));
+            if (!result.Success)
+            {
+                return result;
+            }
             _brandDal.Add(brand);
           return new SuccessResult();
         }
@@ -44,6 +50,14 @@ namespace Business.Concrete
         public IResult Update(Brand brand)
         {
             _brandDal.Update(brand);
+            return new SuccessResult();
+        }
+        private IResult CheckIfBrandNameLengthExceeded(string brandName)
+        {
+            if (brandName.Length >= 30)
+            {
+                return new ErrorResult();
+            }
             return new SuccessResult();
         }
     }
