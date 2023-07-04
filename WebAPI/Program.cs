@@ -5,6 +5,7 @@ using Business.Abstract;
 using Business.Concrete;
 using Business.DependencyResolvers.Autofac;
 using Business.Mapping.AutoMapper;
+using Core.CrossCuttingConcerns.Caching.Redis;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Hangfire;
@@ -25,6 +26,12 @@ builder.Services.AddHangfireServer();
 //Autofac .Net 6+ Implementation
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacBusinessModule()));
+
+//Redis Cache .Net 6+ Impletation 
+builder.Services.AddSingleton<RedisCacheManager>(sp =>
+{
+    return new RedisCacheManager(builder.Configuration["CacheOptions:Url"]);
+});
 
 //AutoMapper .Net 6+ Implementation
 builder.Services.AddAutoMapper(typeof(CarProfile));

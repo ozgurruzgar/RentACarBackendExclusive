@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Contants;
 using Core.Utilities.Business;
 using Core.Utilities.Helpers;
 using Core.Utilities.Results;
@@ -26,7 +27,7 @@ namespace Business.Concrete
             carImage.ImagePath = FileHelper.Add(file);
             carImage.Date = DateTime.Now;
             _carImageDal.Add(carImage);
-            return new SuccessResult();
+            return new SuccessResult(Messages.CarImageAdded);
         }
 
         public IResult Delete(CarImage carImage)
@@ -37,26 +38,26 @@ namespace Business.Concrete
                 return result;
             }
             _carImageDal.Delete(carImage);
-            return new SuccessResult();
+            return new SuccessResult(Messages.CarImageDeleted);
         }
 
         public async Task<IDataResult<List<CarImage>>> GetAllAsync()
         {
             var carImages = await _carImageDal.GetAllAsync();
-            return new SuccessDataResult<List<CarImage>>(carImages);
+            return new SuccessDataResult<List<CarImage>>(carImages,Messages.CarImageListed);
            
         }
 
         public async Task<IDataResult<CarImage>> GetAsync(int id)
         {
             var carImage = await _carImageDal.GetAsync(c=>c.Id == id);
-            return new SuccessDataResult<CarImage>(carImage);
+            return new SuccessDataResult<CarImage>(carImage,Messages.BroughtExpectedCarImage);
         }
 
         public async Task<IDataResult<List<CarImage>>> GetByCarIdAsync(int carId)
         {
             var carImagesByCarId = await _carImageDal.GetAllAsync(c => c.CarId == carId);
-            return new SuccessDataResult<List<CarImage>>(carImagesByCarId);
+            return new SuccessDataResult<List<CarImage>>(carImagesByCarId,Messages.BroughtExpectedCarIamgeByCarId);
         }
 
         public async Task<IResult> Update(IFormFile file, CarImage carImage)
@@ -70,7 +71,7 @@ namespace Business.Concrete
             carImage.Date = DateTime.Now;
             string oldPath = oldImageId.Data.ImagePath;
             carImage.ImagePath = FileHelper.Update(oldPath, file);
-            return new SuccessResult();
+            return new SuccessResult(Messages.CarImageUpdated);
         }
 
         private IResult CarImageDelete(CarImage carImage)
@@ -104,7 +105,7 @@ namespace Business.Concrete
             var list = carImageList.Count; 
             if(list > 15)
             {
-                return new ErrorResult();
+                return new ErrorResult(Messages.CarImageLimitExceeded);
             }
             return new SuccessResult();
         }
