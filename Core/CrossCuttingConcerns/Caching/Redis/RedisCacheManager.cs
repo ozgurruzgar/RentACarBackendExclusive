@@ -1,5 +1,5 @@
 ﻿using Core.Utilities.IoC;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using System;
@@ -13,60 +13,39 @@ namespace Core.CrossCuttingConcerns.Caching.Redis
 {
     public class RedisCacheManager : ICacheManager
     {
-        private readonly IConnectionMultiplexer _connectionMultiplexer;
-        private readonly IDatabase _cacheRepository;
-        private readonly IMemoryCache _memoryCache;
-        public RedisCacheManager(string url,int dbIndex)
+
+        private IDistributedCache _distributedCache;
+        DistributedCacheEntryOptions _options;
+        public RedisCacheManager(IDistributedCache distributedCache)
         {
-            _connectionMultiplexer = ConnectionMultiplexer.Connect(url);
-            _cacheRepository = _connectionMultiplexer.GetDatabase(dbIndex);
-            _memoryCache = ServiceTool.ServiceProvider.GetService<IMemoryCache>();
+            _distributedCache = distributedCache;
+            _options.AbsoluteExpiration = DateTime.Now.AddMinutes(60);
         }
 
-        public void Add(string key, RedisValue value)
+        public async Task Add(string key, RedisValue value)
         {
-            _cacheRepository.ListRightPush(key, value);
+           await _distributedCache.SetAsync(key, value,_options);
         }
 
-        public T Get<T>(string key)
+        public async Task<object> Get(string key)
         {
-            return _memoryCache.Get<T>(key);
+            var result = _distributedCache.GetAsync(key);
+            return result;
         }
 
-        public object Get(string key)
+        public async Task<bool> IsAdd(string key)
         {
-            return _memoryCache.Get(key);
-        }
-
-        public bool IsAdd(string key)
-        {
-            return _memoryCache.TryGetValue(key, out _);
-        }
-
-        public void Remove(string key)
-        {
-            _cacheRepository.ListRightPop(key);
-        }
-
-        public void RemoveByPattern(string pattern)
-        {
-            var cacheEntriesCollectionDefinition = typeof(MemoryCache).GetProperty("EntriesCollection", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var cacheEntriesCollection = cacheEntriesCollectionDefinition.GetValue(_memoryCache) as dynamic;
-            List<ICacheEntry> cacheCollectionValues = new List<ICacheEntry>();
-
-            foreach (var cacheItem in cacheEntriesCollection)
+            var proceed = await _distributedCache.GetAsync(key);
+            var result = proceed.Any();
+            if(result == null)
             {
-                ICacheEntry cacheItemValue = cacheItem.GetType().GetProperty("Value").GetValue(cacheItem, null);
-                cacheCollectionValues.Add(cacheItemValue);
+                return false;
             }
-
-            var regex = new Regex(pattern, RegexOptions.Singleline | RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            var keysToRemove = cacheCollectionValues.Where(d => regex.IsMatch(d.Key.ToString())).Select(d => d.Key).ToList();
-
-            foreach (var key in keysToRemove)
-            {
-                _cacheRepository.ListRightPop((RedisKey)key);
-            }
+            return true;
+        }
+        public async Task Remove(string key)
+        {
+           await _distributedCache.RemoveAsync(key);
         }
 
     }

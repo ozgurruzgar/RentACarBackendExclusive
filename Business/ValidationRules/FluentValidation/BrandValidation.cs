@@ -12,8 +12,6 @@ namespace Business.ValidationRules.FluentValidation
     {
         public BrandValidation()
         {
-            RuleFor(b => b.BrandId).NotEmpty();
-            RuleFor(b => b.BrandId).GreaterThan(0);
             RuleFor(b => b.BrandName).NotEmpty();
             RuleFor(b => b.BrandName).MaximumLength(3);
         }

@@ -22,6 +22,10 @@ namespace Business.Concrete
         public IResult Add(Color color)
         {
             var result = BusinessRules.Run(CheckIfColorNameLengthExceeded(color.ColorName));
+            if(result != null)
+            {
+                return result;
+            }
            _colorDal.Add(color);
             return new SuccessResult(Messages.ColorAdded);
         }

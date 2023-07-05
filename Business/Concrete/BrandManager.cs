@@ -22,7 +22,7 @@ namespace Business.Concrete
         public IResult Add(Brand brand)
         {
             var result = BusinessRules.Run(CheckIfBrandNameLengthExceeded(brand.BrandName));
-            if (!result.Success)
+            if (result != null)
             {
                 return result;
             }

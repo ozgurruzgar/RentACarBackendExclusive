@@ -46,7 +46,7 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
         [HttpPost("add")]
-        public IActionResult Add(IFormFile file,CarImage carImage)
+        public IActionResult Add([FromForm(Name = ("Image"))] IFormFile file,CarImage carImage)
         {
             var result = _carImageService.Add(file, carImage);
             if (!result.Success)
@@ -56,7 +56,7 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
         [HttpPost("delete")]
-        public IActionResult Delete(CarImage carImage)
+        public IActionResult Delete([FromForm(Name = ("Id"))] CarImage carImage)
         {
             var result = _carImageService.Delete(carImage);
             if (!result.Success)
@@ -66,7 +66,7 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
         [HttpPost("update")]
-        public async Task<IActionResult> Update(IFormFile file, CarImage carImage)
+        public async Task<IActionResult> Update([FromForm(Name = ("Image"))] IFormFile file, CarImage carImage)
         {
             var result = await _carImageService.Update(file, carImage);
             if (!result.Success)

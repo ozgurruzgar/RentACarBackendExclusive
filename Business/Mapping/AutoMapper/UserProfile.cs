@@ -14,12 +14,16 @@ namespace Business.Mapping.AutoMapper
         public UserProfile()
         {
             CreateMap<User, UserForLoginDto>()
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(x => x.Email));
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(x => x.Email))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(x => x.Email)).ReverseMap();
 
             CreateMap<User, UserForRegisterDto>()
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(x => x.FirstName))
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(x => x.FirstName)).ReverseMap()
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(x => x.LastName))
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(x => x.Email));
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(x => x.LastName)).ReverseMap()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(x => x.Email))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(x => x.Email)).ReverseMap();
         }
     }
 }

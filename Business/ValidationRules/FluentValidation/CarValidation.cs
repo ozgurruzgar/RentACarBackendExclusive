@@ -14,10 +14,8 @@ namespace Business.ValidationRules.FluentValidation
     {
         public CarValidation() 
         {
-            RuleFor(c=>c.CarId).NotNull();
             RuleFor(c=>c.BrandId).NotNull();
             RuleFor(c=>c.ColorId).NotNull();            
-            RuleFor(c=>c.CarId).NotEqual(0);
             RuleFor(c=>c.BrandId).NotEqual(0);
             RuleFor(c=>c.ColorId).NotEqual(0);
             RuleFor(c => c.ModelYear).GreaterThan((short)2010);

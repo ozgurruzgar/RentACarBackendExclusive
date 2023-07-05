@@ -7,8 +7,6 @@ namespace Business.ValidationRules.FluentValidation
     {
         public CustomerValidation()
         {
-            RuleFor(c => c.CustomerId).NotEmpty();
-            RuleFor(c => c.CustomerId).GreaterThan(0);
             RuleFor(c => c.CompanyName).NotEmpty();
             RuleFor(c => c.CompanyName).MaximumLength(3);
         }

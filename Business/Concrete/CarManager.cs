@@ -1,5 +1,10 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Contants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Transaction;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -20,18 +25,21 @@ namespace Business.Concrete
         {
             _carDal = carDal;
         }
+        [ValidationAspect(typeof(CarValidation))]
         public IResult Add(Car car)
         {
             _carDal.Add(car);
             return new SuccessResult(Messages.CarAdded);
         }
-
+        [TransactionScopeAspect]
         public IResult Delete(Car car)
         {
             _carDal.Delete(car);
             return new SuccessResult(Messages.CarDeleted);
         }
-
+        //[SecuredOperation("admin")]
+        //[CacheAspect] 
+        //[CacheRemoveAspect("ICarService.GetById")]
         public async Task<IDataResult<List<Car>>> GetAllAsync()
         {
            var cars = await _carDal.GetAllAsync();
