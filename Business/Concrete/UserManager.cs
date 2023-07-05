@@ -46,8 +46,13 @@ namespace Business.Concrete
 
         public async Task<User> GetByUserMail(string email)
         {
-            var expectedUser = await _userDal.GetAsync(u => u.Email == email);
-            return expectedUser;
+            var result = await _userDal.GetAsync(u => u.Email == email);
+            User expectedUser = result;
+            if (expectedUser != null) 
+            {
+                return expectedUser;
+            }
+            return new User();
         }
 
         public IDataResult<List<OperationClaim>> GetClaims(User user)

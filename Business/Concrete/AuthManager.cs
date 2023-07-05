@@ -58,7 +58,7 @@ namespace Business.Concrete
 
         public IResult UserExists(string email)
         {
-            if (_userService.GetByUserMail(email) != null)
+            if (_userService.GetByUserMail(email).Result.Email != null)
             {
                 return new ErrorResult("Bu Kullanıcı Zaten Mevcut.");
             }

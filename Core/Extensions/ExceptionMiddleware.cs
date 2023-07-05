@@ -26,7 +26,7 @@ namespace Core.Extensions
             }
             catch (Exception e)
             {
-                await HandleExceptionAsync(httpContext, e);
+                await HandleExceptionAsync(httpContext,e);
             }
         }
 

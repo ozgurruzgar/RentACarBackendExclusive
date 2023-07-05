@@ -37,7 +37,7 @@ namespace Business.Concrete
             _carDal.Delete(car);
             return new SuccessResult(Messages.CarDeleted);
         }
-        //[SecuredOperation("admin")]
+        [SecuredOperation("admin")]
         //[CacheAspect] 
         //[CacheRemoveAspect("ICarService.GetById")]
         public async Task<IDataResult<List<Car>>> GetAllAsync()
