@@ -82,10 +82,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.ConfigureCustomExceptionMiddleware();
-
-app.UseHttpsRedirection();
 //we can see dashboard when we search this routerlink: www.localhost:44313/api/hangfire
 app.UseHangfireDashboard("/hangfire");
+
+app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 

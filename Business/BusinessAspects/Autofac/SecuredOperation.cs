@@ -1,4 +1,5 @@
-﻿using Castle.DynamicProxy;
+﻿using Business.Contants;
+using Castle.DynamicProxy;
 using Core.Extensions;
 using Core.Utilities.Interceptors;
 using Core.Utilities.IoC;
@@ -29,12 +30,12 @@ namespace Business.BusinessAspects.Autofac
             var roleClaims = _httpContextAccessor.HttpContext.User.ClaimRoles();
             foreach (var role in _roles)
             {
-               if (roleClaims.Contains(role))
+                if (roleClaims.Contains(role))
                 {
                     return;
                 }
             }
-            throw new Exception("Yetkiniz yok.");
+            throw new Exception(Messages.AuthorizationDenied);
         }
     }
 }

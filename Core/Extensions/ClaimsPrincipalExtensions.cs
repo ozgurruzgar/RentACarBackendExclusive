@@ -13,7 +13,12 @@ namespace Core.Extensions
 
         public static List<string> ClaimRoles(this ClaimsPrincipal claimsPrincipal)
         {
-            return claimsPrincipal?.Claims(ClaimTypes.Role);
+            List<string> list = claimsPrincipal?.Claims(ClaimTypes.Role);
+            if(list.Count == 0)
+            {
+                throw new Exception("Claims metodu boş dönüyor.");
+            }
+            return list;
         }
     }
 }

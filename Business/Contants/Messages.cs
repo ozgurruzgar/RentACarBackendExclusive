@@ -63,5 +63,6 @@ namespace Business.Contants
         public static string CarImageLimitExceeded="Each car's can be maximum 15 image.";
 
         public static string BroughtExpectedCarIamgeByCarId="Image of carId was listed.";
+        public static string? AuthorizationDenied="You dont have authority.";
     }
 }
