@@ -82,8 +82,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.ConfigureCustomExceptionMiddleware();
-//we can see dashboard when we search this routerlink: www.localhost:44313/api/hangfire
-app.UseHangfireDashboard("/hangfire");
 
 app.UseHttpsRedirection();
 
@@ -94,6 +92,11 @@ app.UseCors(builder => builder.WithOrigins("http://localhost:4200", "https://loc
 app.UseAuthentication();
 
 app.UseAuthorization();
+//we can see dashboard when we search this routerlink: www.localhost:44313/api/hangfire
+app.UseHangfireDashboard("/hangfire", new DashboardOptions()
+{
+    DashboardTitle = "Rent A Car Hangfire Dashboard"
+});
 
 app.MapControllers();
 
