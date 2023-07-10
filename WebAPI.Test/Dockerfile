@@ -17,7 +17,7 @@ WORKDIR "/src/WebAPI.Test"
 RUN dotnet build "WebAPI.Test.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "WebAPI.Test.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "RentACarBackendExclusive.sln" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
