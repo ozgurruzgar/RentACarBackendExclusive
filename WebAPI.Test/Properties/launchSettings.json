@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "WebAPI.Test": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
