@@ -12,7 +12,6 @@ COPY ["Business/Business.csproj", "Business/"]
 COPY ["DataAccess/DataAccess.csproj", "DataAccess/"]
 COPY ["Core/Core.csproj", "Core/"]
 COPY ["Entities/Entities.csproj", "Entities/"]
-COPY ["*.sln", "."]
 RUN dotnet restore "WebAPI/WebAPI.csproj"
 COPY . .
 RUN dotnet test
@@ -20,7 +19,7 @@ WORKDIR "/src/WebAPI"
 RUN dotnet build "WebAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "WebAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish RentACarBackendExclusive.sln -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
