@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{F88E473B-7EF6-4EDF-A280-50E5C0B3AAC5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E4E4C86D-43FC-46F0-801C-1824B5BA07BB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI.Test", "WebAPI.Test\WebAPI.Test.csproj", "{C642DA7F-DA53-480E-8AE9-F72945F046ED}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AA4DC632-6074-4EBB-A247-42EC14999D57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,12 +47,13 @@ Global
 		{C642DA7F-DA53-480E-8AE9-F72945F046ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C642DA7F-DA53-480E-8AE9-F72945F046ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C642DA7F-DA53-480E-8AE9-F72945F046ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA4DC632-6074-4EBB-A247-42EC14999D57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA4DC632-6074-4EBB-A247-42EC14999D57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA4DC632-6074-4EBB-A247-42EC14999D57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA4DC632-6074-4EBB-A247-42EC14999D57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{C642DA7F-DA53-480E-8AE9-F72945F046ED} = {E4E4C86D-43FC-46F0-801C-1824B5BA07BB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9A36D649-90DB-41D6-B8CD-28612ACCE0F3}

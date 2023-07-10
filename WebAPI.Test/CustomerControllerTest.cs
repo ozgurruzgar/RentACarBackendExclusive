@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebAPI.Controllers;
 
-namespace tests.WebAPI.Test
+namespace WebAPI.Test
 {
     public class CustomerControllerTest
     {
