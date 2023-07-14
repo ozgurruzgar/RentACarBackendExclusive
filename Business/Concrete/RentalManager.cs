@@ -1,5 +1,8 @@
 ﻿using Business.Abstract;
 using Business.Contants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -20,7 +23,7 @@ namespace Business.Concrete
         {
             _rentalDal = rentalDal;
         }
-
+        [ValidationAspect(typeof(RentalValidation))]
         public IResult Add(Rental rental)
         {
             _rentalDal.Add(rental);
@@ -32,13 +35,13 @@ namespace Business.Concrete
             _rentalDal.Delete(rental);
             return new SuccessResult(Messages.RentalDeleted);
         }
-
+        [CacheAspect<List<Rental>>]
         public IDataResult<List<Rental>> GetAllAsync()
         {
            var rentals =  _rentalDal.GetAllAsync().Result;
             return new SuccessDataResult<List<Rental>>(rentals,Messages.RentalListed);
         }
-
+        [CacheAspect<Rental>]
         public  IDataResult<Rental> GetAsync(int rentalId)
         {
             var rental = _rentalDal.GetAsync(r=>r.RentalId == rentalId).Result;

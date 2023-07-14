@@ -1,5 +1,8 @@
 ﻿using Business.Abstract;
 using Business.Contants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -19,6 +22,7 @@ namespace Business.Concrete
         {
             _colorDal = colorDal; 
         }
+        [ValidationAspect(typeof(ColorValidation))]
         public IResult Add(Color color)
         {
             var result = BusinessRules.Run(CheckIfColorNameLengthExceeded(color.ColorName));
@@ -29,19 +33,18 @@ namespace Business.Concrete
            _colorDal.Add(color);
             return new SuccessResult(Messages.ColorAdded);
         }
-
         public IResult Delete(Color color)
         {
             _colorDal.Delete(color);
             return new SuccessResult(Messages.ColorDeleted);
         }
-
+        [CacheAspect<List<Color>>]
         public IDataResult<List<Color>> GetAllAsync()
         {
             var colors =  _colorDal.GetAllAsync().Result;
             return new SuccessDataResult<List<Color>>(colors,Messages.ColorListed);
         }
-
+        [CacheAspect<Color>]
         public  IDataResult<Color> GetAsync(int colorId)
         {
             var color =  _colorDal.GetAsync(c => c.ColorId == colorId).Result;

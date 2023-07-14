@@ -39,15 +39,15 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarDeleted);
         }
         //[SecuredOperation("admin")]
-        //[CacheAspect<List<Car>>] 
-        [CacheRemoveAspect("Business.Abstract.ICarService.GetAllAsync()")]
+        [CacheAspect<List<Car>>] 
+        //[CacheRemoveAspect("Business.Abstract.ICarService.GetAllAsync()")]
         public  IDataResult<List<Car>> GetAllAsync()
         {
            var cars =  _carDal.GetAllAsync().Result;
            var carList = new SuccessDataResult<List<Car>>(cars,Messages.CarListed);
            return carList;
         }
-
+        [CacheAspect<Car>]
         public  IDataResult<Car> GetAsync(int carId)
         {
             var car = _carDal.GetAsync(c => c.CarId == carId).Result;

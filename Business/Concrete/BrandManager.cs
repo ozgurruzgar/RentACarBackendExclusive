@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Contants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Results;
@@ -38,13 +39,13 @@ namespace Business.Concrete
             _brandDal.Delete(brand);
             return new SuccessResult(Messages.BrandDeleted);
         }
-
+        [CacheAspect<List<Brand>>]
         public  IDataResult<List<Brand>> GetAllAsync()
         {
            var brands =  _brandDal.GetAllAsync().Result;
             return new SuccessDataResult<List<Brand>>(brands,Messages.BrandListed);
         }
-
+        [CacheAspect<Brand>]
         public  IDataResult<Brand> GetAsync(int brandId)
         {
             var brand =  _brandDal.GetAsync(b => b.BrandId == brandId).Result;
