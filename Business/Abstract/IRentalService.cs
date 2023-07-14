@@ -11,8 +11,8 @@ namespace Business.Abstract
 {
     public interface IRentalService
     {
-        Task<IDataResult<List<Rental>>> GetAllAsync();
-        Task<IDataResult<Rental>> GetAsync(int rentalId);
+        IDataResult<List<Rental>> GetAllAsync();
+        IDataResult<Rental> GetAsync(int rentalId);
         IDataResult<List<RentalDetailDto>> GetRentalDetails();
         IResult Add(Rental rental);
         IResult Delete(Rental rental);

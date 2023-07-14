@@ -29,41 +29,41 @@ namespace WebAPI.Test
             };
         }
         [Fact]
-        public async void GetAllAsync_ActionExecutes_ReturnOkWithCarList()
+        public  void GetAllAsync_ActionExecutes_ReturnOkWithCarList()
         {
-            var setup = _mockRepo.Setup(c => c.GetAllAsync()).ReturnsAsync(_cars);
-            var result = await _carsController.GetAllAsync();
+            var setup = _mockRepo.Setup(c => c.GetAllAsync()).Returns(_cars);
+            var result =  _carsController.GetAllAsync();
             var actionResult = Assert.IsType<OkObjectResult>(result);
             var returnCarList = Assert.IsAssignableFrom<SuccessDataResult<List<Car>>>(actionResult.Value);
             Assert.Equal<int>(200, actionResult.StatusCode.Value);
         }
         [Fact]
-        public async void GetAllAsync_IsInErrorDataResult_ReturnBadRequest()
+        public  void GetAllAsync_IsInErrorDataResult_ReturnBadRequest()
         {
             ErrorDataResult<List<Car>> errorDataResult = new ErrorDataResult<List<Car>>();
-            var setup = _mockRepo.Setup(c => c.GetAllAsync()).ReturnsAsync(errorDataResult);
-            var result = await _carsController.GetAllAsync();
+            var setup = _mockRepo.Setup(c => c.GetAllAsync()).Returns(errorDataResult);
+            var result =  _carsController.GetAllAsync();
             var actionResult = Assert.IsType<BadRequestObjectResult>(result);
             var returnErrorDataResult = Assert.IsAssignableFrom<ErrorDataResult<List<Car>>>(actionResult.Value);
             Assert.Equal<int>(400, actionResult.StatusCode.Value);
         }
         [Theory]
         [InlineData(1)]
-        public async void GetByIdAsync_IsValidCarId_ReturnOkWithCar(int carId)
+        public  void GetByIdAsync_IsValidCarId_ReturnOkWithCar(int carId)
         {
             var successDataResult = new SuccessDataResult<Car>(_cars.Data.First(c => c.CarId == carId));
-            var setup = _mockRepo.Setup(c => c.GetAsync(carId)).ReturnsAsync(successDataResult);
-            var result = await _carsController.GetByIdAsync(carId);
+            var setup = _mockRepo.Setup(c => c.GetAsync(carId)).Returns(successDataResult);
+            var result = _carsController.GetByIdAsync(carId);
             var actionResult = Assert.IsType<OkObjectResult>(result);
             var returnExcpectedCar = Assert.IsAssignableFrom<SuccessDataResult<Car>>(actionResult.Value);
         }
         [Theory]
         [InlineData(3)]
-        public async void GetByIdAsync_IsInValidCarId_ReturnBadRequest(int carId)
+        public  void GetByIdAsync_IsInValidCarId_ReturnBadRequest(int carId)
         {
             var errorDataResult = new ErrorDataResult<Car>();
-            var setup = _mockRepo.Setup(c => c.GetAsync(carId)).ReturnsAsync(errorDataResult);
-            var result = await _carsController.GetByIdAsync(carId);
+            var setup = _mockRepo.Setup(c => c.GetAsync(carId)).Returns(errorDataResult);
+            var result = _carsController.GetByIdAsync(carId);
             var actionResult = Assert.IsType<BadRequestObjectResult>(result);
             var returnErrorDataResult = Assert.IsAssignableFrom<ErrorDataResult<Car>>(actionResult.Value);
         }

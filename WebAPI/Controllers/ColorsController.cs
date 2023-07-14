@@ -50,9 +50,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
-        public async Task<IActionResult> GetAllAsync()
+        public  IActionResult GetAllAsync()
         {
-            var result = await _colorService.GetAllAsync();
+            var result =  _colorService.GetAllAsync();
             if(result.Data == null)
             {
                 return BadRequest(result);
@@ -60,9 +60,9 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
         [HttpGet("getbyid")]
-        public async Task<IActionResult> GetByIdAsync(int colorId)
+        public IActionResult GetByIdAsync(int colorId)
         {
-            var result = await _colorService.GetAsync(colorId);
+            var result =  _colorService.GetAsync(colorId);
             if (result.Data == null)
             {
                 return BadRequest(result);

@@ -18,6 +18,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);   
 
@@ -42,6 +43,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+//Redis Cache .Net 6+ Impletation 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration["CacheOptions:Url"];
+});
+
 builder.Services.AddDependencyResolvers(new ICoreModule[] { new CoreModule() });
 
 //Hangfire Impletation
@@ -55,8 +62,6 @@ builder.Services.AddHangfireServer();
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacBusinessModule()));
 
-//Redis Cache .Net 6+ Impletation 
-builder.Services.AddSingleton<RedisCacheManager>();
 
 //AutoMapper .Net 6+ Implementation
 builder.Services.AddAutoMapper(typeof(CarProfile));
@@ -85,7 +90,9 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
-app.UseCors(builder => builder.WithOrigins("http://localhost:4200", "https://localhost:44313").AllowAnyHeader());
+app.UseCors(builder => builder.WithOrigins("https://localhost:4200", "https://localhost:44313").AllowAnyHeader());
+
+app.UseRouting();
 
 app.UseAuthentication();
 

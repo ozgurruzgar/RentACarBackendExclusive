@@ -36,15 +36,15 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ColorDeleted);
         }
 
-        public async Task<IDataResult<List<Color>>> GetAllAsync()
+        public IDataResult<List<Color>> GetAllAsync()
         {
-            var colors = await _colorDal.GetAllAsync();
+            var colors =  _colorDal.GetAllAsync().Result;
             return new SuccessDataResult<List<Color>>(colors,Messages.ColorListed);
         }
 
-        public async Task<IDataResult<Color>> GetAsync(int colorId)
+        public  IDataResult<Color> GetAsync(int colorId)
         {
-            var color = await _colorDal.GetAsync(c => c.ColorId == colorId);
+            var color =  _colorDal.GetAsync(c => c.ColorId == colorId).Result;
             return new SuccessDataResult<Color>(color,Messages.BroughtExpectedColor);
         }
 

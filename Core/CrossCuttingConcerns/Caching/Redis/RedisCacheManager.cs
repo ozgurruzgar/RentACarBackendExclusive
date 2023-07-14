@@ -1,38 +1,53 @@
-﻿using Core.Utilities.IoC;
+﻿using Azure;
+using Castle.DynamicProxy;
+using Core.Entities;
+using Core.Utilities.IoC;
+using Core.Utilities.Results;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
-using ServiceStack.Redis;
-using ServiceStack.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-
 namespace Core.CrossCuttingConcerns.Caching.Redis
 {
-    public class RedisCacheManager : ICacheManager
+    public class RedisCacheManager : ICacheManager 
     {
         private readonly IDistributedCache _distributedCache;
-        private readonly DistributedCacheEntryOptions _options;
         public RedisCacheManager()
         {
             _distributedCache = ServiceTool.ServiceProvider.GetService<IDistributedCache>();
-            _options.AbsoluteExpiration = DateTime.UtcNow.AddMinutes(60);
-        }
-        public async Task<object> Get(string key)
-        {
-            var result = await _distributedCache.GetAsync(key);
-            Task.CompletedTask.Wait();
-            return result;
         }
 
-        public async Task Add(string key, byte[] value)
+        public async Task Add(string key, object value)
         {
-            await _distributedCache.SetAsync(key, value, _options);
+            DateTimeOffset absoluteExpiration = DateTimeOffset.Now.AddHours(1);
+            DistributedCacheEntryOptions options = new DistributedCacheEntryOptions() { AbsoluteExpiration = absoluteExpiration };
+            var json = JsonConvert.SerializeObject(value, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            byte[] serializeData = Encoding.UTF8.GetBytes(json);
+            await _distributedCache.SetAsync(key, serializeData,options);
+            Task.CompletedTask.Wait();
+        }
+
+        public async Task<SuccessDataResult<TResponse>>? Get<TResponse>(string key)
+        {
+            byte[]? cacheResponse = await _distributedCache.GetAsync(key);
+            if(cacheResponse != null)
+            {
+               var deserializeData = Encoding.UTF8.GetString(cacheResponse);
+               var response = JsonConvert.DeserializeObject<SuccessDataResult<TResponse>>(deserializeData, new JsonSerializerSettings(){ ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+                return response ;
+            }
+            return null;
         }
 
         public bool IsAdd(string key)
@@ -40,14 +55,14 @@ namespace Core.CrossCuttingConcerns.Caching.Redis
             var result = _distributedCache.Get(key);
             if(result != null)
             {
-                return false;
+                return false ;
             }
             return true;
         }
 
         public async Task Remove(string key)
         {
-            await _distributedCache.RemoveAsync(key);
+           await _distributedCache.RemoveAsync(key);
         }
 
     }

@@ -29,42 +29,42 @@ namespace WebAPI.Test
             };
         }
         [Fact]
-        public async void GetAllAsync_ActionExecutes_ReturnOkWithRentals()
+        public  void GetAllAsync_ActionExecutes_ReturnOkWithRentals()
         {
-            var setup = _mockRepo.Setup(r => r.GetAllAsync()).ReturnsAsync(_rentals);
-            var result = await _rentalController.GetAllAsync();
+            var setup = _mockRepo.Setup(r => r.GetAllAsync()).Returns(_rentals);
+            var result = _rentalController.GetAllAsync();
             var actionResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal<int>(200, actionResult.StatusCode.Value);
             Assert.IsAssignableFrom<SuccessDataResult<List<Rental>>>(actionResult.Value);
         }
         [Fact]
-        public async void GetAllAsync_IsErrorDataResult_ReturnBadRequst()
+        public  void GetAllAsync_IsErrorDataResult_ReturnBadRequst()
         {
             var errorDataResult = new ErrorDataResult<List<Rental>>() { Data = null };
-            var setup = _mockRepo.Setup(r => r.GetAllAsync()).ReturnsAsync(errorDataResult);
-            var result = await _rentalController.GetAllAsync();
+            var setup = _mockRepo.Setup(r => r.GetAllAsync()).Returns(errorDataResult);
+            var result = _rentalController.GetAllAsync();
             var actionResult = Assert.IsType<BadRequestObjectResult>(result);
             Assert.Equal<int>(400, actionResult.StatusCode.Value);
             Assert.IsAssignableFrom<ErrorDataResult<List<Rental>>>(actionResult.Value);
         }
         [Theory]
         [InlineData(1)]
-        public async void GetById_IsValidRentalId_ReturnOkWithExpectedRental(int rentalId)
+        public  void GetById_IsValidRentalId_ReturnOkWithExpectedRental(int rentalId)
         {
             var expectedRental = new SuccessDataResult<Rental>() { Data = _rentals.Data.First(r => r.RentalId == rentalId) };
-            var setup = _mockRepo.Setup(r => r.GetAsync(rentalId)).ReturnsAsync(expectedRental);
-            var result = await _rentalController.GetByIdAsync(rentalId);
+            var setup = _mockRepo.Setup(r => r.GetAsync(rentalId)).Returns(expectedRental);
+            var result = _rentalController.GetByIdAsync(rentalId);
             var actionResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal<int>(200, actionResult.StatusCode.Value);
             Assert.IsAssignableFrom<SuccessDataResult<Rental>>(actionResult.Value);
         }        
         [Theory]
         [InlineData(3)]
-        public async void GetById_IsInValidRentalId_ReturnBadRequest(int rentalId)
+        public  void GetById_IsInValidRentalId_ReturnBadRequest(int rentalId)
         {
             var isInValidRental = new ErrorDataResult<Rental>() { Data =null };
-            var setup = _mockRepo.Setup(r => r.GetAsync(rentalId)).ReturnsAsync(isInValidRental);
-            var result = await _rentalController.GetByIdAsync(rentalId);
+            var setup = _mockRepo.Setup(r => r.GetAsync(rentalId)).Returns(isInValidRental);
+            var result = _rentalController.GetByIdAsync(rentalId);
             var actionResult = Assert.IsType<BadRequestObjectResult>(result);
             Assert.Equal<int>(400, actionResult.StatusCode.Value);
             Assert.IsAssignableFrom<ErrorDataResult<Rental>>(actionResult.Value);

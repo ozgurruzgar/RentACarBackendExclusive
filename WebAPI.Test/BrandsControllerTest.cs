@@ -31,43 +31,43 @@ namespace WebAPI.Test
         }
 
         [Fact]
-        public async void GetAllAsync_ActionExecutes_ReturnGetAllBrands()
+        public void GetAllAsync_ActionExecutes_ReturnGetAllBrands()
         {
-            var brandList= _mockRepo.Setup(b => b.GetAllAsync()).ReturnsAsync(_brands);
-            var result = await _brandController.GetAllAsync();
+            var brandList= _mockRepo.Setup(b => b.GetAllAsync()).Returns(_brands);
+            var result =  _brandController.GetAllAsync();
             var okResult = Assert.IsType<OkObjectResult>(result);
             var returnBrand = Assert.IsAssignableFrom<SuccessDataResult<List<Brand>>>(okResult.Value);
             Assert.Equal<int>(2, returnBrand.Data.Count);
         }
 
         [Fact]
-        public async void GetAllAsync_IsInErrorIDataResult_ReturnBadRequest() 
+        public void GetAllAsync_IsInErrorIDataResult_ReturnBadRequest() 
         {
             ErrorDataResult<List<Brand>> fakeBrand = new ErrorDataResult<List<Brand>> { Data=null};
-            var brandList = _mockRepo.Setup(b => b.GetAllAsync()).ReturnsAsync(fakeBrand);
-            var result = await _brandController.GetAllAsync();
+            var brandList = _mockRepo.Setup(b => b.GetAllAsync()).Returns(fakeBrand);
+            var result =  _brandController.GetAllAsync();
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
             var returnBrand = Assert.IsAssignableFrom<ErrorDataResult<List<Brand>>>(badRequestResult.Value);
         }
 
         [Theory]
         [InlineData(1)]
-        public async void GetById_ActionExecutes_ReturnBrandByBrandId(int brandId)
+        public void GetById_ActionExecutes_ReturnBrandByBrandId(int brandId)
         {
             var brand = new SuccessDataResult<Brand>(_brands.Data.First(b=>b.BrandId==brandId));
-            var expectedBrand = _mockRepo.Setup(b => b.GetAsync(brandId)).ReturnsAsync(brand);
-            var result = await _brandController.GetByIdAsync(brandId);
+            var expectedBrand = _mockRepo.Setup(b => b.GetAsync(brandId)).Returns(brand);
+            var result = _brandController.GetByIdAsync(brandId);
             var successBrand = Assert.IsType<OkObjectResult>(result);
             Assert.Equal<int>(200, successBrand.StatusCode.Value);
         }
 
         [Theory]
         [InlineData(3)]
-        public async void GetById_IsInValidBrandId_ReturnBadRequest(int brandId)
+        public void GetById_IsInValidBrandId_ReturnBadRequest(int brandId)
         {
             var brand = new ErrorDataResult<Brand>();
-            var expectedBrand = _mockRepo.Setup(b => b.GetAsync(brandId)).ReturnsAsync(brand);
-            var result = await _brandController.GetByIdAsync(brandId);
+            var expectedBrand = _mockRepo.Setup(b => b.GetAsync(brandId)).Returns(brand);
+            var result =  _brandController.GetByIdAsync(brandId);
             var successBrand = Assert.IsType<BadRequestObjectResult>(result);
             Assert.Equal<int>(400, successBrand.StatusCode.Value);
         }

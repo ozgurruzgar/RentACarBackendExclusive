@@ -33,15 +33,15 @@ namespace Business.Concrete
             return new SuccessResult(Messages.RentalDeleted);
         }
 
-        public async Task<IDataResult<List<Rental>>> GetAllAsync()
+        public IDataResult<List<Rental>> GetAllAsync()
         {
-           var rentals = await _rentalDal.GetAllAsync();
+           var rentals =  _rentalDal.GetAllAsync().Result;
             return new SuccessDataResult<List<Rental>>(rentals,Messages.RentalListed);
         }
 
-        public async Task<IDataResult<Rental>> GetAsync(int rentalId)
+        public  IDataResult<Rental> GetAsync(int rentalId)
         {
-            var rental = await _rentalDal.GetAsync(r=>r.RentalId == rentalId);
+            var rental = _rentalDal.GetAsync(r=>r.RentalId == rentalId).Result;
             return new SuccessDataResult<Rental>(rental,Messages.BroughtExpectedRental);
         }
 

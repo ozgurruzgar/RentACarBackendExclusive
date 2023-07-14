@@ -11,8 +11,8 @@ namespace Business.Abstract
 {
     public interface ICustomerService
     {
-        Task<IDataResult<List<Customer>>> GetAllAsync();
-        Task<IDataResult<Customer>> GetAsync(int customerId);
+        IDataResult<List<Customer>> GetAllAsync();
+        IDataResult<Customer> GetAsync(int customerId);
         IDataResult<List<CustomerDetailDto>> GetCustomerDetail();
         IResult Add(Customer customer);
         IResult Delete(Customer customer);

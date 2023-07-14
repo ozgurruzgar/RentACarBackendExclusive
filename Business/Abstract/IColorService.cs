@@ -10,8 +10,8 @@ namespace Business.Abstract
 {
     public interface IColorService
     {
-        Task<IDataResult<List<Color>>> GetAllAsync();
-        Task<IDataResult<Color>> GetAsync(int colorId);
+        IDataResult<List<Color>> GetAllAsync();
+        IDataResult<Color> GetAsync(int colorId);
         IResult Add(Color color);
         IResult Delete(Color color);
         IResult Update(Color color);

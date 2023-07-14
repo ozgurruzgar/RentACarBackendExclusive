@@ -39,15 +39,15 @@ namespace Business.Concrete
             return new SuccessResult(Messages.BrandDeleted);
         }
 
-        public async Task<IDataResult<List<Brand>>> GetAllAsync()
+        public  IDataResult<List<Brand>> GetAllAsync()
         {
-           var brands = await _brandDal.GetAllAsync();
+           var brands =  _brandDal.GetAllAsync().Result;
             return new SuccessDataResult<List<Brand>>(brands,Messages.BrandListed);
         }
 
-        public async Task<IDataResult<Brand>> GetAsync(int brandId)
+        public  IDataResult<Brand> GetAsync(int brandId)
         {
-            var brand = await _brandDal.GetAsync(b => b.BrandId == brandId);
+            var brand =  _brandDal.GetAsync(b => b.BrandId == brandId).Result;
             return new SuccessDataResult<Brand>(brand,Messages.BroughtExpectedBrand);
         }
 

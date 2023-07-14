@@ -32,15 +32,15 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CustomerDeleted);
         }
 
-        public async Task<IDataResult<List<Customer>>> GetAllAsync()
+        public  IDataResult<List<Customer>> GetAllAsync()
         {
-            var customers = await _customerDal.GetAllAsync();
+            var customers =  _customerDal.GetAllAsync().Result;
             return new SuccessDataResult<List<Customer>>(customers,Messages.CustomerListed);
         }
 
-        public async Task<IDataResult<Customer>> GetAsync(int customerId)
+        public  IDataResult<Customer> GetAsync(int customerId)
         {
-            var customer = await _customerDal.GetAsync(c => c.CustomerId == customerId);
+            var customer =  _customerDal.GetAsync(c => c.CustomerId == customerId).Result;
             return new SuccessDataResult<Customer>(customer,Messages.BroughtExpectedCustomer);
         }
 

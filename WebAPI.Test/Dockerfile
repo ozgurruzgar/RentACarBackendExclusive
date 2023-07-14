@@ -11,10 +11,11 @@ COPY ["DataAccess/DataAccess.csproj", "DataAccess/"]
 COPY ["Core/Core.csproj", "Core/"]
 COPY ["Entities/Entities.csproj", "Entities/"]
 COPY ["WebAPI/WebAPI.csproj", "WebAPI/"]
-RUN dotnet restore "WebAPI.Test/WebAPI.Test.csproj"
+RUN dotnet test
+RUN dotnet restore "WebAPI/WebAPI.csproj"
 COPY . .
 WORKDIR "/src/WebAPI.Test"
-RUN dotnet build "WebAPI.Test.csproj" -c Release -o /app/build
+RUN dotnet build "WebAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "RentACarBackendExclusive.sln" -c Release -o /app/publish /p:UseAppHost=false
@@ -22,4 +23,4 @@ RUN dotnet publish "RentACarBackendExclusive.sln" -c Release -o /app/publish /p:
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "WebAPI.Test.dll"]
+ENTRYPOINT ["dotnet", "WebAPI.dll"]

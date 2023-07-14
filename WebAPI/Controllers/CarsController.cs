@@ -50,9 +50,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
-        public async Task<IActionResult> GetAllAsync()
+        public  IActionResult GetAllAsync()
         {
-            var result = await _carService.GetAllAsync();
+            var result =  _carService.GetAllAsync();
             if (result.Data == null)
             {
                 return BadRequest(result);
@@ -61,9 +61,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getbyid")]
-        public async Task<IActionResult> GetByIdAsync(int carId)
+        public  IActionResult GetByIdAsync(int carId)
         {
-            var result = await _carService.GetAsync(carId);
+            var result = _carService.GetAsync(carId);
             if (result.Data == null)
             {
                 return BadRequest(result);

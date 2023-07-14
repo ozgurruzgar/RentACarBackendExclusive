@@ -30,32 +30,32 @@ namespace WebAPI.Test
         }
 
         [Fact]
-        public async void GetAllAsync_ActionExecutes_ReturnGetAllColors()
+        public  void GetAllAsync_ActionExecutes_ReturnGetAllColors()
         {
-            var colorList = _mockRepo.Setup(b => b.GetAllAsync()).ReturnsAsync(_colors);
-            var result = await _colorController.GetAllAsync();
+            var colorList = _mockRepo.Setup(b => b.GetAllAsync()).Returns(_colors);
+            var result =  _colorController.GetAllAsync();
             var okResult = Assert.IsType<OkObjectResult>(result);
             var returnColor = Assert.IsAssignableFrom<SuccessDataResult<List<Color>>>(okResult.Value);
             Assert.Equal<int>(2, returnColor.Data.Count);
         }
 
         [Fact]
-        public async void GetAllAsync_IsInErrorIDataResult_ReturnBadRequest()
+        public  void GetAllAsync_IsInErrorIDataResult_ReturnBadRequest()
         {
             ErrorDataResult<List<Color>> fakeColor = new ErrorDataResult<List<Color>> { Data = null };
-            var colorList = _mockRepo.Setup(b => b.GetAllAsync()).ReturnsAsync(fakeColor);
-            var result = await _colorController.GetAllAsync();
+            var colorList = _mockRepo.Setup(b => b.GetAllAsync()).Returns(fakeColor);
+            var result =  _colorController.GetAllAsync();
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
             var returnColor = Assert.IsAssignableFrom<ErrorDataResult<List<Color>>>(badRequestResult.Value);
         }
 
         [Theory]
         [InlineData(1)]
-        public async void GetById_ActionExecutes_ReturnColorByColorId(int colorId)
+        public  void GetById_ActionExecutes_ReturnColorByColorId(int colorId)
         {
             var color = new SuccessDataResult<Color>(_colors.Data.First(c =>c.ColorId == colorId));
-            var expectedColor = _mockRepo.Setup(b => b.GetAsync(colorId)).ReturnsAsync(color);
-            var result = await _colorController.GetByIdAsync(colorId);
+            var expectedColor = _mockRepo.Setup(b => b.GetAsync(colorId)).Returns(color);
+            var result =  _colorController.GetByIdAsync(colorId);
             var successColor = Assert.IsType<OkObjectResult>(result);
             Assert.Equal<int>(200, successColor.StatusCode.Value);
         }
@@ -65,8 +65,8 @@ namespace WebAPI.Test
         public async void GetById_IsInValidColorId_ReturnBadRequest(int colorId)
         {
             var color = new ErrorDataResult<Color>();
-            var expectedColor = _mockRepo.Setup(b => b.GetAsync(colorId)).ReturnsAsync(color);
-            var result = await _colorController.GetByIdAsync(colorId);
+            var expectedColor = _mockRepo.Setup(b => b.GetAsync(colorId)).Returns(color);
+            var result = _colorController.GetByIdAsync(colorId);
             var successColor = Assert.IsType<BadRequestObjectResult>(result);
             Assert.Equal<int>(400, successColor.StatusCode.Value);
         }

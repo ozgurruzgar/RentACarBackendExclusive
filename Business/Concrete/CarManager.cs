@@ -5,6 +5,7 @@ using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
+using Core.Entities;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -31,25 +32,25 @@ namespace Business.Concrete
             _carDal.Add(car);
             return new SuccessResult(Messages.CarAdded);
         }
-        [TransactionScopeAspect]
+        //[TransactionScopeAspect]
         public IResult Delete(Car car)
         {
             _carDal.Delete(car);
             return new SuccessResult(Messages.CarDeleted);
         }
         //[SecuredOperation("admin")]
-        //[CacheAspect] 
-        //[CacheRemoveAspect("ICarService.GetById")]
-        public async Task<IDataResult<List<Car>>> GetAllAsync()
+        //[CacheAspect<List<Car>>] 
+        [CacheRemoveAspect("Business.Abstract.ICarService.GetAllAsync()")]
+        public  IDataResult<List<Car>> GetAllAsync()
         {
-           var cars = await _carDal.GetAllAsync();
+           var cars =  _carDal.GetAllAsync().Result;
            var carList = new SuccessDataResult<List<Car>>(cars,Messages.CarListed);
            return carList;
         }
 
-        public async Task<IDataResult<Car>> GetAsync(int carId)
+        public  IDataResult<Car> GetAsync(int carId)
         {
-            var car = await _carDal.GetAsync(c => c.CarId == carId);
+            var car = _carDal.GetAsync(c => c.CarId == carId).Result;
             return new SuccessDataResult<Car>(car,Messages.BroughtExpectedCar);
         }
 

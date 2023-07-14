@@ -10,8 +10,8 @@ namespace Business.Abstract
 {
     public interface IBrandService
     {
-        Task<IDataResult<List<Brand>>> GetAllAsync();
-        Task<IDataResult<Brand>> GetAsync(int brandId);
+        IDataResult<List<Brand>> GetAllAsync();
+        IDataResult<Brand> GetAsync(int brandId);
         IResult Add(Brand brand);
         IResult Delete(Brand brand);
         IResult Update(Brand brand);

@@ -16,9 +16,9 @@ namespace Core.DependencyResolvers
     {
         public void Load(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddMemoryCache();
-            serviceCollection.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            serviceCollection.AddDistributedMemoryCache();
             serviceCollection.AddSingleton<ICacheManager, RedisCacheManager>();
+            serviceCollection.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             serviceCollection.AddSingleton<Stopwatch>();
         }
     }

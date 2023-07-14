@@ -45,9 +45,9 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
         [HttpGet("getall")]
-        public async Task<IActionResult> GetAllAsync()
+        public IActionResult GetAllAsync()
         {
-            var result = await _customerService.GetAllAsync();
+            var result =  _customerService.GetAllAsync();
             if (result.Data == null)
             {
                 return BadRequest(result);
@@ -55,9 +55,9 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
         [HttpGet("getbyid")]
-        public async Task<IActionResult> GetByIdAsync(int customerId)
+        public  IActionResult GetByIdAsync(int customerId)
         {
-            var result = await _customerService.GetAsync(customerId);
+            var result = _customerService.GetAsync(customerId);
             if (result.Data == null)
             {
                 return BadRequest(result);
