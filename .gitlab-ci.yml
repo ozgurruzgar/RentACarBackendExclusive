@@ -1,0 +1,15 @@
+image: mcr.microsoft.com/dotnet/core/sdk:7.0
+
+stages: 
+  -build
+
+variables: 
+  test: "NetCore.Test"
+
+before_script:
+  - "dotnet restore"
+
+build:
+  stage: build
+  script:
+  - "dotnet build"
