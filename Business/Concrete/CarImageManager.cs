@@ -16,7 +16,11 @@ namespace Business.Concrete
 {
     public class CarImageManager : ICarImageService
     {
-        private readonly ICarImageDal _carImageDal;
+        private ICarImageDal _carImageDal;
+        public CarImageManager(ICarImageDal carImageDal)
+        {
+            _carImageDal = carImageDal;
+        }
         public IResult Add(IFormFile file, CarImage carImage)
         {
             Task<IResult> result = BusinessRules.RunTasks(CheckIfCarImageLimitExceeded(carImage.CarId));
@@ -59,18 +63,18 @@ namespace Business.Concrete
             var carImagesByCarId = await _carImageDal.GetAllAsync(c => c.CarId == carId);
             return new SuccessDataResult<List<CarImage>>(carImagesByCarId,Messages.BroughtExpectedCarIamgeByCarId);
         }
-
-        public async Task<IResult> Update(IFormFile file, CarImage carImage)
+        public IResult Update(IFormFile file, CarImage carImage)
         {
             Task<IResult> result = BusinessRules.RunTasks(CheckIfCarImageLimitExceeded(carImage.CarId));
             if (result.Result != null)
             {
                 return result.Result;
             }
-            var oldImageId = await GetAsync(carImage.Id);
+            carImage.CarId = GetAsync(carImage.Id).Result.Data.CarId;
             carImage.Date = DateTime.Now;
-            string oldPath = oldImageId.Data.ImagePath;
+            string oldPath = GetAsync(carImage.Id).Result.Data.ImagePath;
             carImage.ImagePath = FileHelper.Update(oldPath, file);
+            _carImageDal.Update(carImage);
             return new SuccessResult(Messages.CarImageUpdated);
         }
 
@@ -78,7 +82,7 @@ namespace Business.Concrete
         {
             try
             {
-                _carImageDal.Delete(carImage);
+                File.Delete(carImage.ImagePath);
             }
             catch (Exception exception)
             {
@@ -109,5 +113,6 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
+
     }
 }

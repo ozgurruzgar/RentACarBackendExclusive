@@ -25,7 +25,7 @@ namespace Core.Utilities.Helpers
 
             var result = NewPath(path);
             File.Move(sourcePath, result);
-            return result;
+            return path;
         }
         public static void Delete(string path)
         {
@@ -40,7 +40,7 @@ namespace Core.Utilities.Helpers
 
         private static string NewPath(string file)
         {
-            string path = Environment.CurrentDirectory + "wwwroot/Uploads/Images";
+            string path = Environment.CurrentDirectory + @"\wwwroot\Uploads\Images";
 
             string result = $@"{path}\{file}";
             return result;
