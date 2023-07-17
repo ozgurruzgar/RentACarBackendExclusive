@@ -14,7 +14,6 @@ using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.JWT;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
-using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -50,13 +49,6 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 builder.Services.AddDependencyResolvers(new ICoreModule[] { new CoreModule() });
-
-//Hangfire Impletation
-builder.Services.AddHangfire(config =>
-{
-    config.UseSqlServerStorage(builder.Configuration.GetConnectionString("HangFireConnection"));
-});
-builder.Services.AddHangfireServer();
 
 //Autofac .Net 6+ Implementation
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
@@ -97,11 +89,6 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
-//we can see dashboard when we search this routerlink: www.localhost:44313/api/hangfire
-app.UseHangfireDashboard("/hangfire", new DashboardOptions()
-{
-    DashboardTitle = "Rent A Car Hangfire Dashboard"
-});
 
 app.MapControllers();
 
