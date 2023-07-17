@@ -16,6 +16,6 @@ namespace Business.Abstract
         Task<IDataResult<CarImage>> GetAsync(int id);
         IResult Add(IFormFile file, CarImage carImage);
         IResult Delete(CarImage carImage);
-        Task<IResult> Update(IFormFile file, CarImage carImage);
+        IResult Update(IFormFile file, CarImage carImage);
     }
 }
